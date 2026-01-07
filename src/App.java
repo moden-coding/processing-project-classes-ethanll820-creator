@@ -33,7 +33,8 @@ public class App extends PApplet {
         hunter.move(moveX, moveY);
 
         pushMatrix();
-        translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());
+        translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());//move "coordinate grid" as a whole constantly as the hunter moves
+    
 
         image(background, 0, 0);// draw background
 

@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 
-public class NPCs{
+public class NPCs {
     private String type;
     private int size;
     private int speed;
@@ -9,37 +9,59 @@ public class NPCs{
 
     private float x;
     private float y;
+    private boolean alive = true;
 
-     private PApplet canvas;
+    private PApplet canvas;
 
-    public NPCs(String type, int size, int speed, float x, float y, PApplet c) {
+    NPCs(String type, float x, float y, int size, int speed, PApplet c) {
         this.type = type;
         this.size = size;
         this.speed = speed;
         this.canvas = c;
-        this.x = canvas.width/2;
-        this.y = 200;
+        this.x = x;
+        this.y = y;
     }
 
-    public void display(){
+    public void display() {
+        if(!alive){
+            return;
+        }
         canvas.fill(color);
-        
         canvas.ellipse(x, y, size, size);
     }
-    public void movement() {
-    // move horizontally
-    x += speed * direction;
 
-    
-    if (x < size / 2 || x > canvas.width - size / 2) {
-        direction *= -1;
+    public void movement() {
+        if(!alive){
+            return;
+        }
+        // move horizontally
+        x += speed * direction;
+
+        if (x < size / 2 || x > canvas.width - size / 2) {
+            direction *= -1;
+        }
+
+        float wobbleAmplitude = canvas.random(2f, 17.5f); // max pixels that changes randomly
+
+        x += wobbleAmplitude * canvas.sin(canvas.frameCount * 0.1f); // moves sinusoidally
+        y += wobbleAmplitude * canvas.cos(canvas.frameCount * 0.1f);
     }
 
-   float wobbleAmplitude = canvas.random(2f,17.5f); //max pixels that changes randomly
-   
+    public float getNPCsX() {
+        return x;
+    }
 
-x += wobbleAmplitude * canvas.sin(canvas.frameCount*0.1f); // moves sinusoidally
-y += wobbleAmplitude * canvas.cos(canvas.frameCount*0.1f);
-}
-
+    public float getNPCsY() {
+        return y;
+    }
+    
+    public int getNPCsSize(){
+        return size;
+    }
+    public void kill(){
+        alive = false;
+    }
+    public boolean isAlive(){
+        return alive;
+    }
 }

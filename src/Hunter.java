@@ -18,6 +18,12 @@ public class Hunter {
         this.y = y;
         this.canvas = c;
     }
+    public float getX(){
+        return x;
+    }
+    public float getY(){
+        return y;
+    }
 
     public void display() {
         canvas.fill(color);
@@ -41,6 +47,7 @@ public class Hunter {
         canvas.stroke(0); // draw line
         canvas.strokeWeight(4);
         canvas.line(x, y, x2, y2);
+       
     }
 
 }

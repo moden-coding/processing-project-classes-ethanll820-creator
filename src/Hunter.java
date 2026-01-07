@@ -8,23 +8,26 @@ public class Hunter {
     private float x;
     private float y;
 
-    public Hunter(int size, int color, int speed, float x, float y) {
+    private PApplet canvas;
+
+    public Hunter(int size, int color, int speed, float x, float y, PApplet c) {
     this.size = size;
     this.color = color;
     this.speed = speed;
     this.x = x;
     this.y = y;
+    this.canvas = c;
 }
 
-public void display(PApplet p) {
-        p.fill(color);
-        p.noStroke();
-        p.ellipse(x, y, size, size);
+public void display() {
+        canvas.fill(color);
+        canvas.noStroke();
+        canvas.circle(x, y, size);
     }
 
-    public void displayGunSlope(PApplet p) {
-    float dx = p.mouseX - x;
-    float dy = p.mouseY - y;
+    public void displayGunSlope() {
+    float dx = canvas.mouseX - x;
+    float dy = canvas.mouseY - y;
 
     float gunLength = size; 
 
@@ -34,9 +37,9 @@ public void display(PApplet p) {
     float x2 = x + dx / distance * gunLength;
     float y2 = y + dy / distance * gunLength;
 
-    p.stroke(0);
-    p.strokeWeight(4);
-    p.line(x, y, x2, y2);
+    canvas.stroke(0);
+    canvas.strokeWeight(4);
+    canvas.line(x, y, x2, y2);
 }
 
     

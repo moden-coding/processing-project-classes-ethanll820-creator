@@ -7,7 +7,7 @@ public class App extends PApplet{
     }
 
     public void setup(){
-        hunter = new Hunter(50, 50, 5, 200, 200);
+        hunter = new Hunter(50,50,5,500,400,this);
         
     }
 
@@ -17,8 +17,8 @@ public class App extends PApplet{
 
     public void draw(){
        background(54, 186, 41);
-       hunter.display(this);
-         hunter.displayGunSlope(this); 
+       hunter.display();
+         hunter.displayGunSlope(); 
 }
 
     }

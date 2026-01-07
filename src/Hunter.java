@@ -5,8 +5,8 @@ public class Hunter {
     private int color;
     private int speed;
 
-    private float x;
-    private float y;
+    private float x, vX;
+    private float y, vY;
 
     private PApplet canvas;
 
@@ -30,7 +30,10 @@ public class Hunter {
         canvas.noStroke();
         canvas.circle(x, y, size);
     }
-
+    public void move(float xN, float yN) {
+        x += xN;
+        y += yN;
+    }
     public void displayGun() {
         float dx = canvas.mouseX - x;//distance from mouse
         float dy = canvas.mouseY - y;

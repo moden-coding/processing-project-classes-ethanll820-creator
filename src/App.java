@@ -24,7 +24,7 @@ public class App extends PApplet {
     public void draw() {
         background(54, 186, 41);
         hunter.display();
-        hunter.displayGunSlope();
+        hunter.displayGun();
         beaver.display();
         beaver.movement();
 
@@ -40,7 +40,7 @@ public class App extends PApplet {
     }
 
 public void keyPressed() {
-    if (key == ' ') { // spacebar
+    if (key == ' ') { // space
         bullets.add(new Bullets(500, 400 - 20, 10, 8, this));
     }
     }

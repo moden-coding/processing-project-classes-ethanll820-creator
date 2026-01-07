@@ -25,7 +25,7 @@ public class Hunter {
         canvas.circle(x, y, size);
     }
 
-    public void displayGunSlope() {
+    public void displayGun() {
         float dx = canvas.mouseX - x;//distance from mouse
         float dy = canvas.mouseY - y;
 

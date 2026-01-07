@@ -1,13 +1,13 @@
 import processing.core.PApplet;
 
-public class Bullets{
-    float x;
-    float y;
-    float size;
-    float speed;
-    PApplet canvas;
+public class Bullets {
+    private float x;
+    private float y;
+    private float size;
+    private float speed;
+    private PApplet canvas;
 
-    Bullets(float x, float y, float speed, float size, PApplet canvas) {
+    public Bullets(float x, float y, float speed, float size, PApplet canvas) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -15,13 +15,12 @@ public class Bullets{
         this.canvas = canvas;
     }
 
-    void update() {
-        // move the bullet upwards
+    public void update() {
         y -= speed;
     }
 
-     void display() {
-        canvas.fill(255, 255, 0); // yellow bullet
+    public void display() {
+        canvas.fill(255, 255, 0);
         canvas.noStroke();
         canvas.ellipse(x, y, size, size);
     }

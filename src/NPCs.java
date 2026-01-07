@@ -35,10 +35,10 @@ public class NPCs{
         direction *= -1;
     }
 
-   float wobbleAmplitude = canvas.random(2f,17.5f); //max pixels that changes sinusoidally
+   float wobbleAmplitude = canvas.random(2f,17.5f); //max pixels that changes randomly
    
 
-x += wobbleAmplitude * canvas.sin(canvas.frameCount*0.1f);
+x += wobbleAmplitude * canvas.sin(canvas.frameCount*0.1f); // moves sinusoidally
 y += wobbleAmplitude * canvas.cos(canvas.frameCount*0.1f);
 }
 

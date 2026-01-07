@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+
 import processing.core.*;
 
 public class App extends PApplet {
     Hunter hunter;
     NPCs beaver;
+    ArrayList<Bullets> bullets = new ArrayList<Bullets>();
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -24,6 +27,21 @@ public class App extends PApplet {
         hunter.displayGunSlope();
         beaver.display();
         beaver.movement();
+
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullets b = bullets.get(i);
+            b.update();
+            b.display();
+
+            if (b.isOffScreen()) {
+                bullets.remove(i);
+            }
+        }
     }
 
+public void keyPressed() {
+    if (key == ' ') { // spacebar
+        bullets.add(new Bullets(500, 400 - 20, 10, 8, this));
+    }
+    }
 }

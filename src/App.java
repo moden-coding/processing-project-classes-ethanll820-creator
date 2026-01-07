@@ -10,7 +10,7 @@ public class App extends PApplet {
 
     public void setup() {
         hunter = new Hunter(50, 50, 5, 500, 400, this);
-        beaver = new NPCs("cow", 50, 50, 300, 300, this);
+        beaver = new NPCs("cow", 50, 10, 300, 300, this);
 
     }
 
@@ -23,6 +23,7 @@ public class App extends PApplet {
         hunter.display();
         hunter.displayGunSlope();
         beaver.display();
+        beaver.movement();
     }
 
 }

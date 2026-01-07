@@ -6,6 +6,9 @@ public class App extends PApplet {
     Hunter hunter;
     NPCs beaver;
     PImage background;
+    float moveX = 0;
+    float moveY = 0;
+    float speed = 5;
     ArrayList<Bullets> bullets = new ArrayList<Bullets>();
 
     public static void main(String[] args) {
@@ -27,31 +30,34 @@ public class App extends PApplet {
 
     public void draw() {
         background(0);
+        hunter.move(moveX, moveY);
 
         pushMatrix();
         translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());
 
-        // draw background
-        image(background, 0, 0);
+        image(background, 0, 0);// draw background
 
+        beaver.movement();// NPCs
         beaver.display();
-        beaver.movement();
-        popMatrix();
-        for (int i = bullets.size() - 1; i >= 0; i--) {
+
+        for (int i = bullets.size() - 1; i >= 0; i--) {// bullets
             Bullets b = bullets.get(i);
             b.update();
             b.display();
 
-            if (enemyCollisions(b, beaver) == true) {
+            if (enemyCollisions(b, beaver)) {
                 bullets.remove(i);
                 beaver.kill();
-                break;
+                continue;
             }
 
             if (b.isOffScreen()) {
                 bullets.remove(i);
             }
         }
+
+        popMatrix();
+
         hunter.display();
         hunter.displayGun();
 
@@ -73,20 +79,30 @@ public class App extends PApplet {
     }
 
     public void keyPressed() {
-        int speed = 5;
-        if (keyCode == 'D') {
-            hunter.move(speed, 0);
-        } else if (keyCode == 'A') {
-            hunter.move(-speed, 0);
-        } else if (keyCode == 'W') {
-            hunter.move(0, -speed);
-        } else if (keyCode == 'S') {
-            hunter.move(0, speed);
-        }
+        if (keyCode == 'D')
+            moveX = speed;
+        if (keyCode == 'A')
+            moveX = -speed;
+        if (keyCode == 'W')
+            moveY = -speed;
+        if (keyCode == 'S')
+            moveY = speed;
 
         if (key == ' ') {
-            bullets.add(new Bullets(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
-                    mouseY + hunter.getY() - height / 2, this));
+            float worldMouseX = mouseX + hunter.getX() - width / 2;
+            float worldMouseY = mouseY + hunter.getY() - height / 2;
+
+            if (key == ' ') {
+                bullets.add(new Bullets(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
+                        mouseY + hunter.getY() - height / 2, this));
+            }
         }
+    }
+
+    public void keyReleased() {
+        if (keyCode == 'D' || keyCode == 'A')
+            moveX = 0;
+        if (keyCode == 'W' || keyCode == 'S')
+            moveY = 0;
     }
 }

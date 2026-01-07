@@ -45,7 +45,7 @@ public class Bullets {
     }
 
     public boolean isOffScreen() {
-        return x < -size || x > canvas.width + size || y < -size || y > canvas.height + size;
+        return x < -size || x > 2000 + size || y < -size || y > 1600 + size;
     }
 
     public float getBulletX(){

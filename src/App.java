@@ -4,7 +4,6 @@ import processing.core.*;
 
 public class App extends PApplet {
     Hunter hunter;
-    NPC beaver;
     PImage background;
     float moveX = 0;
     float moveY = 0;
@@ -20,7 +19,7 @@ public class App extends PApplet {
 
     public void setup() {
         hunter = new Hunter(50, 50, 5, 500, 400, this);
-        beaver = new NPC("cow", 500, 200, 50, 5, this);
+        cowMaker();
 
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
@@ -40,9 +39,7 @@ public class App extends PApplet {
                                                                          // as the hunter moves
 
         image(background, 0, 0);// draw background
-
-        beaver.movement();// NPCs
-        beaver.display();
+        NPCMovement();
 
         bulletChecker();
 
@@ -50,7 +47,6 @@ public class App extends PApplet {
 
         hunter.display();
         hunter.displayGun();
-
     }
 
     public boolean enemyCollisions(Bullet b, NPC e) {
@@ -69,20 +65,34 @@ public class App extends PApplet {
     }
 
     public void bulletChecker() {
-        for (int i = bullets.size() - 1; i >= 0; i--) {// bullets
-            Bullet b = bullets.get(i);
-            b.update();
-            b.display();
+    for (int i = bullets.size() - 1; i >= 0; i--) {
+        Bullet b = bullets.get(i);
+        b.update();
+        b.display();
 
-            if (enemyCollisions(b, beaver)) {
-                bullets.remove(i);
-                beaver.kill();
-                continue;
-            }
+        boolean hitEnemy = false;
 
-            if (b.isOffScreen()) {
-                bullets.remove(i);
+        for (NPC n : NPCs) {
+            if (enemyCollisions(b, n)) {
+                n.kill();        // enemy dies
+                hitEnemy = true;
+                break;
             }
+        }
+
+        if (hitEnemy || b.isOffScreen()) {
+            bullets.remove(i);
+        }
+    }
+}
+
+    public void cowMaker() {
+        NPCs.add(new NPC("cow", 500, 200, 50, 5, this));
+    }
+    public void NPCMovement(){
+        for (NPC n : NPCs) {
+            n.movement();
+            n.display();
         }
     }
 

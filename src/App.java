@@ -12,7 +12,7 @@ public class App extends PApplet {
     int lastShotTime;
     boolean shooting;
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    
+    ArrayList<NPC> NPCs = new ArrayList<NPC>();
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -44,21 +44,7 @@ public class App extends PApplet {
         beaver.movement();// NPCs
         beaver.display();
 
-        for (int i = bullets.size() - 1; i >= 0; i--) {// bullets
-            Bullet b = bullets.get(i);
-            b.update();
-            b.display();
-
-            if (enemyCollisions(b, beaver)) {
-                bullets.remove(i);
-                beaver.kill();
-                continue;
-            }
-
-            if (b.isOffScreen()) {
-                bullets.remove(i);
-            }
-        }
+        bulletChecker();
 
         popMatrix();
 
@@ -82,6 +68,24 @@ public class App extends PApplet {
         return distance <= bulletRadius + enemyRadius;
     }
 
+    public void bulletChecker() {
+        for (int i = bullets.size() - 1; i >= 0; i--) {// bullets
+            Bullet b = bullets.get(i);
+            b.update();
+            b.display();
+
+            if (enemyCollisions(b, beaver)) {
+                bullets.remove(i);
+                beaver.kill();
+                continue;
+            }
+
+            if (b.isOffScreen()) {
+                bullets.remove(i);
+            }
+        }
+    }
+
     public void keyPressed() {
         if (keyCode == 'D')
             moveX = speed;
@@ -96,8 +100,8 @@ public class App extends PApplet {
             // float worldMouseX = mouseX + hunter.getX() - width / 2;
             // float worldMouseY = mouseY + hunter.getY() - height / 2;
             shoot();
-            shooting=true;
-            
+            shooting = true;
+
         }
     }
 
@@ -106,7 +110,7 @@ public class App extends PApplet {
             moveX = 0;
         if (keyCode == 'W' || keyCode == 'S')
             moveY = 0;
-        if(key == ' '){
+        if (key == ' ') {
             shooting = false;
 
         }
@@ -115,7 +119,6 @@ public class App extends PApplet {
     public void shoot() {
         bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
                 mouseY + hunter.getY() - height / 2, this));
-                
 
     }
 }

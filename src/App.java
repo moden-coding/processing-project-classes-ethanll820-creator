@@ -4,12 +4,15 @@ import processing.core.*;
 
 public class App extends PApplet {
     Hunter hunter;
-    NPCs beaver;
+    NPC beaver;
     PImage background;
     float moveX = 0;
     float moveY = 0;
     float speed = 5;
-    ArrayList<Bullets> bullets = new ArrayList<Bullets>();
+    int lastShotTime;
+    boolean shooting;
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    
 
     public static void main(String[] args) {
         PApplet.main("App");
@@ -17,7 +20,7 @@ public class App extends PApplet {
 
     public void setup() {
         hunter = new Hunter(50, 50, 5, 500, 400, this);
-        beaver = new NPCs("cow", 500, 200, 50, 5, this);
+        beaver = new NPC("cow", 500, 200, 50, 5, this);
 
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
@@ -33,8 +36,8 @@ public class App extends PApplet {
         hunter.move(moveX, moveY);
 
         pushMatrix();
-        translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());//move "coordinate grid" as a whole constantly as the hunter moves
-    
+        translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());// move "coordinate grid" as a whole constantly
+                                                                         // as the hunter moves
 
         image(background, 0, 0);// draw background
 
@@ -42,7 +45,7 @@ public class App extends PApplet {
         beaver.display();
 
         for (int i = bullets.size() - 1; i >= 0; i--) {// bullets
-            Bullets b = bullets.get(i);
+            Bullet b = bullets.get(i);
             b.update();
             b.display();
 
@@ -64,7 +67,7 @@ public class App extends PApplet {
 
     }
 
-    public boolean enemyCollisions(Bullets b, NPCs e) {
+    public boolean enemyCollisions(Bullet b, NPC e) {
         if (!e.isAlive()) {
             return false;
         }
@@ -90,13 +93,11 @@ public class App extends PApplet {
             moveY = speed;
 
         if (key == ' ') {
-            float worldMouseX = mouseX + hunter.getX() - width / 2;
-            float worldMouseY = mouseY + hunter.getY() - height / 2;
-
-            if (key == ' ') {
-                bullets.add(new Bullets(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
-                        mouseY + hunter.getY() - height / 2, this));
-            }
+            // float worldMouseX = mouseX + hunter.getX() - width / 2;
+            // float worldMouseY = mouseY + hunter.getY() - height / 2;
+            shoot();
+            shooting=true;
+            
         }
     }
 
@@ -105,5 +106,16 @@ public class App extends PApplet {
             moveX = 0;
         if (keyCode == 'W' || keyCode == 'S')
             moveY = 0;
+        if(key == ' '){
+            shooting = false;
+
+        }
+    }
+
+    public void shoot() {
+        bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
+                mouseY + hunter.getY() - height / 2, this));
+                
+
     }
 }

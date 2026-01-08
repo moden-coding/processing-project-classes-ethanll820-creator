@@ -10,6 +10,8 @@ public class Hunter {
 
     private PApplet canvas;
 
+    private int reload;
+
     public Hunter(int size, int color, int speed, float x, float y, PApplet c) {
         this.size = size;
         this.color = color;
@@ -23,6 +25,9 @@ public class Hunter {
     }
     public float getY(){
         return y;
+    }
+    public int getReload(){
+        return reload;
     }
 
     public void display() {

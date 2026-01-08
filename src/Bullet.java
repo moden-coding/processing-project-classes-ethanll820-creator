@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 
-public class Bullets {
+public class Bullet {
     private float x;
     private float y;
     private float size;
@@ -11,7 +11,7 @@ public class Bullets {
     private float vx;
     private float vy;
 
-    public Bullets(float x, float y, float speed, float size, float targetX, float targetY, PApplet canvas) {
+    public Bullet(float x, float y, float speed, float size, float targetX, float targetY, PApplet canvas) {
         this.x = x;
         this.y = y;
         this.speed = speed;

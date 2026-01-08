@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 
-public class NPCs {
+public class NPC {
     private String type;
     private int size;
     private int speed;
@@ -13,7 +13,7 @@ public class NPCs {
 
     private PApplet canvas;
 
-    NPCs(String type, float x, float y, int size, int speed, PApplet c) {
+    NPC(String type, float x, float y, int size, int speed, PApplet c) {
         this.type = type;
         this.size = size;
         this.speed = speed;

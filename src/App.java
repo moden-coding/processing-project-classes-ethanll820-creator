@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import processing.core.*;
+import processing.sound.*;
 
 public class App extends PApplet {
     Hunter hunter;
@@ -13,6 +14,8 @@ public class App extends PApplet {
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     ArrayList<NPC> NPCs = new ArrayList<NPC>();
 
+    SoundFile music;
+
     public static void main(String[] args) {
         PApplet.main("App");
     }
@@ -23,6 +26,8 @@ public class App extends PApplet {
 
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
+        music = new SoundFile(this, "music.mp3");
+        // music.play();
 
     }
 
@@ -34,7 +39,7 @@ public class App extends PApplet {
         background(0);
         hunter.move(moveX, moveY);
 
-        pushMatrix();
+        pushMatrix();// chatgpt
         translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());// move "coordinate grid" as a whole constantly
                                                                          // as the hunter moves
 
@@ -43,7 +48,7 @@ public class App extends PApplet {
 
         bulletChecker();
 
-        popMatrix();
+        popMatrix();// chatgpt
 
         hunter.display();
         hunter.displayGun();
@@ -65,31 +70,32 @@ public class App extends PApplet {
     }
 
     public void bulletChecker() {
-    for (int i = bullets.size() - 1; i >= 0; i--) {
-        Bullet b = bullets.get(i);
-        b.update();
-        b.display();
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            b.update();
+            b.display();
 
-        boolean hitEnemy = false;
+            boolean hitEnemy = false;
 
-        for (NPC n : NPCs) {
-            if (enemyCollisions(b, n)) {
-                n.kill();        // enemy dies
-                hitEnemy = true;
-                break;
+            for (NPC n : NPCs) {
+                if (enemyCollisions(b, n)) {
+                    n.kill(); // enemy dies
+                    hitEnemy = true;
+                    break;
+                }
+            }
+
+            if (hitEnemy || b.isOffScreen()) {
+                bullets.remove(i);
             }
         }
-
-        if (hitEnemy || b.isOffScreen()) {
-            bullets.remove(i);
-        }
     }
-}
 
     public void cowMaker() {
         NPCs.add(new NPC("cow", 500, 200, 50, 5, this));
     }
-    public void NPCMovement(){
+
+    public void NPCMovement() {
         for (NPC n : NPCs) {
             n.movement();
             n.display();

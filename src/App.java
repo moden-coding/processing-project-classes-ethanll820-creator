@@ -5,6 +5,7 @@ import processing.sound.*;
 
 public class App extends PApplet {
     Hunter hunter;
+    Obstacle rock;
     PImage background;
     float moveX = 0;
     float moveY = 0;
@@ -13,6 +14,8 @@ public class App extends PApplet {
     boolean shooting;
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     ArrayList<NPC> NPCs = new ArrayList<NPC>();
+    ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+    int coins;
 
     SoundFile music;
 
@@ -23,6 +26,7 @@ public class App extends PApplet {
     public void setup() {
         hunter = new Hunter(50, 50, 5, 500, 400, this);
         cowMaker();
+        rock = new Obstacle(300, 1000, 10, "rock", this);
 
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
@@ -47,6 +51,14 @@ public class App extends PApplet {
         NPCMovement();
 
         bulletChecker();
+        for (Obstacle o : obstacles) {
+
+            
+        }
+        rock.display();
+        if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
+                speed = 0;
+            }
 
         popMatrix();// chatgpt
 
@@ -81,6 +93,7 @@ public class App extends PApplet {
                 if (enemyCollisions(b, n)) {
                     n.kill(); // enemy dies
                     hitEnemy = true;
+                    coins = coins + 10;// gives money
                     break;
                 }
             }

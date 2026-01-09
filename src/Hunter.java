@@ -29,9 +29,12 @@ public class Hunter {
     public int getReload(){
         return reload;
     }
+    public int getSize(){
+        return size;
+    }
 
     public void display() {
-        canvas.fill(color);
+        canvas.fill(250, 213, 112);
         canvas.noStroke();
         canvas.circle(canvas.width / 2, canvas.height / 2, size);
 

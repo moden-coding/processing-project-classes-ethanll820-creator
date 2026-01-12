@@ -4,7 +4,7 @@ import processing.core.*;
 import processing.sound.*;
 
 public class App extends PApplet {
-    Hunter hunter;
+   Hunter hunter;
     Obstacle rock;
     PImage background;
     float moveX = 0;
@@ -56,9 +56,10 @@ public class App extends PApplet {
             
         }
         rock.display();
-        if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
+                if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
                 speed = 0;
             }
+
 
         popMatrix();// chatgpt
 
@@ -105,7 +106,7 @@ public class App extends PApplet {
     }
 
     public void cowMaker() {
-        NPCs.add(new NPC("cow", 500, 200, 50, 5, this));
+        NPCs.add(new NPC("cow", 500, 200, 50, 2, this, hunter));
     }
 
     public void NPCMovement() {

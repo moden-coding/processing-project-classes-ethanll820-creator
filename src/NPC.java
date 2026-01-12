@@ -13,13 +13,17 @@ public class NPC {
 
     private PApplet canvas;
 
-    NPC(String type, float x, float y, int size, int speed, PApplet c) {
+    private Hunter hunter;
+
+    NPC(String type, float x, float y, int size, int speed, PApplet c, Hunter h) {
         this.type = type;
         this.size = size;
         this.speed = speed;
         this.canvas = c;
         this.x = x;
         this.y = y;
+        this.hunter = h;
+        
     }
 
     public void display() {
@@ -34,17 +38,30 @@ public class NPC {
         if(!alive){
             return;
         }
-        // move horizontally
-        x += speed * direction;
+        float dx = hunter.getX() - x;
+        float dy = hunter.getY() - y;
+
+        float distance = canvas.sqrt(dx * dx + dy * dy);
+        if (distance == 0){
+            return;
+        }
+        dx = dx/distance; //normalize components
+        dy = dy/distance;
+
+        x = x+(dx * speed);//mulitply components by speed and set equal to position
+        y = y+(dy * speed);
+
+        
 
         if (x < size / 2 || x > canvas.width - size / 2) {
-            direction *= -1;
+            distance *= -1;
         }
 
-        float wobbleAmplitude = canvas.random(2f, 17.5f); // max pixels that changes randomly
+        // float wobbleAmplitude = canvas.random(2f, 17.5f); // max pixels that changes randomly
 
-        x += wobbleAmplitude * canvas.sin(canvas.frameCount * 0.1f); // moves sinusoidally
-        y += wobbleAmplitude * canvas.cos(canvas.frameCount * 0.1f);
+        // x += wobbleAmplitude * canvas.sin(canvas.frameCount * 0.1f); // moves sinusoidally
+        // y += wobbleAmplitude * canvas.cos(canvas.frameCount * 0.1f);
+
     }
 
     public float getNPCsX() {

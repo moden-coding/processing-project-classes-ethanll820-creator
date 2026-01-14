@@ -20,6 +20,7 @@ public class App extends PApplet {
     int scene = 0;
     Button PLAY;
     Button SHOP;
+    Button BACK;
 
     SoundFile music;
 
@@ -36,8 +37,9 @@ public class App extends PApplet {
         background.resize(2000, 1600);
         music = new SoundFile(this, "music.mp3");
         // music.play();
-        PLAY = new Button("PLAY",375, 300, 250, 50, 10, this);
-        SHOP = new Button("SHOP", 375, 600, 250, 50, 10, this);
+        PLAY = new Button("PLAY", 375, 300, 250, 50, 10, this);
+        SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);
+        BACK = new Button("BACK", 375, 400, 250, 50, 10, this);
 
     }
 
@@ -82,7 +84,6 @@ public class App extends PApplet {
             level++;
             NPCs.clear();
         }
-                
 
     }
 
@@ -108,10 +109,7 @@ public class App extends PApplet {
         text("You have " + coins + " coins", width / 2, 250);
 
         // Back button to go back to title
-        fill(180, 0, 0);
-        rect(350, 400, 300, 80, 20);
-        fill(255);
-        text("BACK", width / 2, 455);
+        BACK.display();
     }
 
     public boolean enemyCollisions(Bullet b, NPC e) {
@@ -124,7 +122,7 @@ public class App extends PApplet {
         float dx = b.getBulletX() - e.getNPCsX();
         float dy = b.getBulletY() - e.getNPCsY();
 
-        float distance = sqrt(dx * dx + dy * dy); //pythaogorean theorem
+        float distance = sqrt(dx * dx + dy * dy); // pythaogorean theorem
 
         return distance <= bulletRadius + enemyRadius;
     }
@@ -240,16 +238,20 @@ public class App extends PApplet {
         if (scene == 2 && mouseX > 350 && mouseX < 650 && mouseY > 400 && mouseY < 480) { // back from shop
             scene = 0;
         }
-        if(PLAY.hovered(mouseX, mouseY)==true) {
+        if (PLAY.hovered(mouseX, mouseY) == true) {
             scene = 1;
         }
-        if(SHOP.hovered(mouseX, mouseY)==true) {
+        if (SHOP.hovered(mouseX, mouseY) == true) {
             scene = 2;
         }
+        if (BACK.hovered(mouseX, mouseY) == true) {
+            scene = 0;
+        }
     }
+
     public void mouseMoved() {
-        if(PLAY.hovered(mouseX,mouseY)) {
-            PLAY.setColor(255,30,30);
+        if (PLAY.hovered(mouseX, mouseY)) {
+            PLAY.setColor(255, 30, 30);
         }
     }
 }

@@ -18,6 +18,8 @@ public class App extends PApplet {
     int coins;
     int level = 1;
     int scene = 0;
+    Button PLAY;
+    Button SHOP;
 
     SoundFile music;
 
@@ -34,6 +36,8 @@ public class App extends PApplet {
         background.resize(2000, 1600);
         music = new SoundFile(this, "music.mp3");
         // music.play();
+        PLAY = new Button("PLAY",375, 300, 250, 50, 10, this);
+        SHOP = new Button("SHOP", 375, 600, 250, 50, 10, this);
 
     }
 
@@ -78,27 +82,18 @@ public class App extends PApplet {
             level++;
             NPCs.clear();
         }
+                
 
     }
 
     public void drawTitleScreen() { // Title
         background(30, 120, 60);
-
         textAlign(CENTER);
         textSize(64);
         fill(255);
         text("HUNTER", width / 2, 150);
-
-        fill(0, 180, 0);// Play button
-        rect(350, 300, 300, 80, 20);
-        fill(255);
-        textSize(32);
-        text("PLAY LEVEL " + level, width / 2, 355);
-
-        fill(180, 120, 0); // Shop button
-        rect(350, 420, 300, 80, 20);
-        fill(255);
-        text("SHOP", width / 2, 475);
+        PLAY.display();
+        SHOP.display();
     }
 
     public void drawShopScreen() {
@@ -244,6 +239,17 @@ public class App extends PApplet {
         }
         if (scene == 2 && mouseX > 350 && mouseX < 650 && mouseY > 400 && mouseY < 480) { // back from shop
             scene = 0;
+        }
+        if(PLAY.hovered(mouseX, mouseY)==true) {
+            scene = 1;
+        }
+        if(SHOP.hovered(mouseX, mouseY)==true) {
+            scene = 2;
+        }
+    }
+    public void mouseMoved() {
+        if(PLAY.hovered(mouseX,mouseY)) {
+            PLAY.setColor(255,30,30);
         }
     }
 }

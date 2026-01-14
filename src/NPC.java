@@ -11,7 +11,7 @@ public class NPC {
     private PApplet canvas;
     private Hunter hunter;
 
-    NPC(String type, float x, float y, int size, int speed, PApplet c, Hunter h) {
+    public NPC(String type, float x, float y, int size, int speed, PApplet c, Hunter h) {
         this.type = type;
         this.size = size;
         this.speed = speed;

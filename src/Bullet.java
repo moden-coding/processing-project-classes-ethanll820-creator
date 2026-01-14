@@ -6,8 +6,6 @@ public class Bullet {
     private float size;
     private float speed;
     private PApplet canvas;
-    private float targetX;
-    private float targetY;
     private float vx;
     private float vy;
 
@@ -17,14 +15,12 @@ public class Bullet {
         this.speed = speed;
         this.size = size;
         this.canvas = canvas;
-        this.targetX=targetX;
-        this.targetY=targetY;
 
         float dx = targetX - x;
         float dy = targetY - y;
 
         // normalize
-        float mag = (float)Math.sqrt(dx * dx + dy * dy);
+        float mag = (float) Math.sqrt(dx * dx + dy * dy);
         dx /= mag;
         dy /= mag;
 
@@ -35,7 +31,7 @@ public class Bullet {
 
     public void update() {
         x += vx;
-       y += vy;
+        y += vy;
     }
 
     public void display() {
@@ -48,13 +44,15 @@ public class Bullet {
         return x < -size || x > 2000 + size || y < -size || y > 1600 + size;
     }
 
-    public float getBulletX(){
+    public float getBulletX() {
         return x;
     }
-    public float getBulletY(){
+
+    public float getBulletY() {
         return y;
     }
-    public float getBulletSize(){
+
+    public float getBulletSize() {
         return size;
     }
 

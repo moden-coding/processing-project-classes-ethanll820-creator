@@ -4,7 +4,7 @@ import processing.core.*;
 import processing.sound.*;
 
 public class App extends PApplet {
-   Hunter hunter;
+    Hunter hunter;
     Obstacle rock;
     PImage background;
     float moveX = 0;
@@ -16,6 +16,8 @@ public class App extends PApplet {
     ArrayList<NPC> NPCs = new ArrayList<NPC>();
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
     int coins;
+    int level = 1;
+    int scene = 0;
 
     SoundFile music;
 
@@ -40,31 +42,81 @@ public class App extends PApplet {
     }
 
     public void draw() {
-        background(0);
-        hunter.move(moveX, moveY);
+        if (scene == 0) {
+            drawTitleScreen();
 
-        pushMatrix();// chatgpt
-        translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());// move "coordinate grid" as a whole constantly
-                                                                         // as the hunter moves
+        } else if (scene == 1) {
+            background(0);
+            hunter.move(moveX, moveY);
 
-        image(background, 0, 0);// draw background
-        NPCMovement();
+            pushMatrix();// chatgpt
+            translate(width / 2 - hunter.getX(), height / 2 - hunter.getY());// move "coordinate grid" as a whole
+                                                                             // constantly
+                                                                             // as the hunter moves
 
-        bulletChecker();
-        for (Obstacle o : obstacles) {
+            image(background, 0, 0);// draw background
+            NPCMovement();
 
-            
-        }
-        rock.display();
-                if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
+            bulletChecker();
+            for (Obstacle o : obstacles) {
+
+            }
+            rock.display();
+            if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
                 speed = 0;
             }
 
+            popMatrix();// chatgpt
 
-        popMatrix();// chatgpt
+            hunter.display();
+            hunter.displayGun();
+        } else if (scene == 2) {
+            drawShopScreen();
+        }
+        if (scene == 1 && allEnemiesDead()) {// go back to title screen
+            scene = 0;
+            level++;
+            NPCs.clear();
+        }
 
-        hunter.display();
-        hunter.displayGun();
+    }
+
+    public void drawTitleScreen() { // Title
+        background(30, 120, 60);
+
+        textAlign(CENTER);
+        textSize(64);
+        fill(255);
+        text("HUNTER", width / 2, 150);
+
+        fill(0, 180, 0);// Play button
+        rect(350, 300, 300, 80, 20);
+        fill(255);
+        textSize(32);
+        text("PLAY LEVEL " + level, width / 2, 355);
+
+        fill(180, 120, 0); // Shop button
+        rect(350, 420, 300, 80, 20);
+        fill(255);
+        text("SHOP", width / 2, 475);
+    }
+
+    public void drawShopScreen() {
+        rectMode(CORNER);
+        background(40); // clear old screen
+
+        textAlign(CENTER);
+        textSize(32);
+        fill(255);
+
+        text("SHOP", width / 2, 150);
+        text("You have " + coins + " coins", width / 2, 250);
+
+        // Back button to go back to title
+        fill(180, 0, 0);
+        rect(350, 400, 300, 80, 20);
+        fill(255);
+        text("BACK", width / 2, 455);
     }
 
     public boolean enemyCollisions(Bullet b, NPC e) {
@@ -77,7 +129,7 @@ public class App extends PApplet {
         float dx = b.getBulletX() - e.getNPCsX();
         float dy = b.getBulletY() - e.getNPCsY();
 
-        float distance = sqrt(dx * dx + dy * dy);
+        float distance = sqrt(dx * dx + dy * dy); //pythaogorean theorem
 
         return distance <= bulletRadius + enemyRadius;
     }
@@ -105,8 +157,39 @@ public class App extends PApplet {
         }
     }
 
+    public boolean allEnemiesDead() {
+        for (NPC n : NPCs) {
+            if (n.isAlive()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void cowMaker() {
-        NPCs.add(new NPC("cow", 500, 200, 50, 2, this, hunter));
+        if (level == 1) {
+            for (int i = 0; i < 5; i++) {
+                NPCs.add(new NPC(
+                        "cow",
+                        random(100, 1900),
+                        random(100, 1500),
+                        50,
+                        2,
+                        this,
+                        hunter));
+            }
+        } else if (level == 2) {
+            for (int i = 0; i < 10; i++) {
+                NPCs.add(new NPC(
+                        "cow",
+                        random(100, 1900),
+                        random(100, 1500),
+                        50,
+                        4,
+                        this,
+                        hunter));
+            }
+        }
     }
 
     public void NPCMovement() {
@@ -114,6 +197,12 @@ public class App extends PApplet {
             n.movement();
             n.display();
         }
+    }
+
+    public void shoot() {
+        bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
+                mouseY + hunter.getY() - height / 2, this));
+
     }
 
     public void keyPressed() {
@@ -127,8 +216,6 @@ public class App extends PApplet {
             moveY = speed;
 
         if (key == ' ') {
-            // float worldMouseX = mouseX + hunter.getX() - width / 2;
-            // float worldMouseY = mouseY + hunter.getY() - height / 2;
             shoot();
             shooting = true;
 
@@ -146,9 +233,17 @@ public class App extends PApplet {
         }
     }
 
-    public void shoot() {
-        bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
-                mouseY + hunter.getY() - height / 2, this));
-
+    public void mousePressed() {
+        if (scene == 0 && mouseX > 350 && mouseX < 650 && mouseY > 300 && mouseY < 380) { // play button
+            NPCs.clear();
+            cowMaker();
+            scene = 1;
+        }
+        if (scene == 0 && mouseX > 350 && mouseX < 650 && mouseY > 420 && mouseY < 600) {// shop button
+            scene = 2; // go to shop
+        }
+        if (scene == 2 && mouseX > 350 && mouseX < 650 && mouseY > 400 && mouseY < 480) { // back from shop
+            scene = 0;
+        }
     }
 }

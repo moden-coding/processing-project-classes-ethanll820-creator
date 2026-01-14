@@ -20,16 +20,20 @@ public class Hunter {
         this.y = y;
         this.canvas = c;
     }
-    public float getX(){
+
+    public float getX() {
         return x;
     }
-    public float getY(){
+
+    public float getY() {
         return y;
     }
-    public int getReload(){
+
+    public int getReload() {
         return reload;
     }
-    public int getSize(){
+
+    public int getSize() {
         return size;
     }
 
@@ -39,29 +43,32 @@ public class Hunter {
         canvas.circle(canvas.width / 2, canvas.height / 2, size);
 
     }
+
     public void move(float xN, float yN) {
         x += xN;
         y += yN;
     }
+
     public void displayGun() {
-    float hx = canvas.width / 2;//always drawn at center
-    float hy = canvas.height / 2;
+        float hx = canvas.width / 2;// always drawn at center
+        float hy = canvas.height / 2;
 
-    float dx = canvas.mouseX - hx;
-    float dy = canvas.mouseY - hy;
+        float dx = canvas.mouseX - hx;
+        float dy = canvas.mouseY - hy;
 
-    float gunLength = 50;
+        float gunLength = 50;
 
-    float distance = PApplet.sqrt(dx * dx + dy * dy);//pythagorean theorem
-    if (distance == 0) distance = 1;
+        float distance = PApplet.sqrt(dx * dx + dy * dy);// pythagorean theorem
+        if (distance == 0)
+            distance = 1;
 
-    float x2 = hx + dx / distance * gunLength;//make into unit vector
-    float y2 = hy + dy / distance * gunLength;
+        float x2 = hx + dx / distance * gunLength;// make into unit vector
+        float y2 = hy + dy / distance * gunLength;
 
-    canvas.stroke(0);
-    canvas.strokeWeight(4);
-    canvas.line(hx, hy, x2, y2);
-       
+        canvas.stroke(0);
+        canvas.strokeWeight(4);
+        canvas.line(hx, hy, x2, y2);
+
     }
 
 }

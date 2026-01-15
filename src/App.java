@@ -162,25 +162,11 @@ public class App extends PApplet {
     public void cowMaker() {
         if (level == 1) {
             for (int i = 0; i < 5; i++) {
-                NPCs.add(new NPC(
-                        "cow",
-                        random(100, 1900),
-                        random(100, 1500),
-                        50,
-                        2,
-                        this,
-                        hunter));
+                NPCs.add(new NPC("cow", random(100, 1900), random(100, 1500), 50, 2, this, hunter));
             }
         } else if (level == 2) {
             for (int i = 0; i < 10; i++) {
-                NPCs.add(new NPC(
-                        "cow",
-                        random(100, 1900),
-                        random(100, 1500),
-                        50,
-                        4,
-                        this,
-                        hunter));
+                NPCs.add(new NPC("cow", random(100, 1900), random(100, 1500), 50, 4, this, hunter));
             }
         }
     }
@@ -227,18 +213,9 @@ public class App extends PApplet {
     }
 
     public void mousePressed() {
-        if (scene == 0 && mouseX > 350 && mouseX < 650 && mouseY > 300 && mouseY < 380) { // play button
+        if (PLAY.hovered(mouseX, mouseY) == true) {
             NPCs.clear();
             cowMaker();
-            scene = 1;
-        }
-        if (scene == 0 && mouseX > 350 && mouseX < 650 && mouseY > 420 && mouseY < 600) {// shop button
-            scene = 2; // go to shop
-        }
-        if (scene == 2 && mouseX > 350 && mouseX < 650 && mouseY > 400 && mouseY < 480) { // back from shop
-            scene = 0;
-        }
-        if (PLAY.hovered(mouseX, mouseY) == true) {
             scene = 1;
         }
         if (SHOP.hovered(mouseX, mouseY) == true) {

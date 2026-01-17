@@ -2,19 +2,14 @@ import processing.core.PApplet;
 
 public class Hunter {
     private int size;
-    private int color;
     private int speed;
-
-    private float x, vX;
-    private float y, vY;
-
+    private float x;
+    private float y;
     private PApplet canvas;
-
     private int reload;
 
     public Hunter(int size, int color, int speed, float x, float y, PApplet c) {
         this.size = size;
-        this.color = color;
         this.speed = speed;
         this.x = x;
         this.y = y;
@@ -35,6 +30,9 @@ public class Hunter {
 
     public int getSize() {
         return size;
+    }
+    public int getSpeed(){
+        return speed;
     }
 
     public void display() {

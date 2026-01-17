@@ -1,7 +1,6 @@
 import processing.core.PApplet;
 
 public class NPC {
-    private String type;
     private int size;
     private int speed;
     private int color;
@@ -11,8 +10,7 @@ public class NPC {
     private PApplet canvas;
     private Hunter hunter;
 
-    public NPC(String type, float x, float y, int size, int speed, PApplet c, Hunter h) {
-        this.type = type;
+    public NPC(float x, float y, int size, int speed, PApplet c, Hunter h) {
         this.size = size;
         this.speed = speed;
         this.canvas = c;
@@ -50,14 +48,6 @@ public class NPC {
         if (x < size / 2 || x > canvas.width - size / 2) {
             distance *= -1;
         }
-
-        // float wobbleAmplitude = canvas.random(2f, 17.5f); // max pixels that changes
-        // randomly
-
-        // x += wobbleAmplitude * canvas.sin(canvas.frameCount * 0.1f); // moves
-        // sinusoidally
-        // y += wobbleAmplitude * canvas.cos(canvas.frameCount * 0.1f);
-
     }
 
     public float getNPCsX() {
@@ -79,4 +69,16 @@ public class NPC {
     public boolean isAlive() {
         return alive;
     }
+    public boolean collidesWithPlayer(Hunter h) {
+    float npcRadius = this.size / 2;
+    float hRadius = h.getSize() / 2;
+
+    float dx = this.x - h.getX();
+    float dy = this.y - h.getY();
+
+    float distance = PApplet.sqrt(dx * dx + dy * dy);
+
+    return distance <= npcRadius + hRadius;
+}
+
 }

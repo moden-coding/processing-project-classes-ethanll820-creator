@@ -5,7 +5,6 @@ import processing.sound.*;
 
 public class App extends PApplet {
     Hunter hunter;
-    Obstacle rock;
     PImage background;
     float moveX = 0;
     float moveY = 0;
@@ -29,15 +28,12 @@ public class App extends PApplet {
     }
 
     public void setup() {
-        hunter = new Hunter(50, 50, 5, 500, 400, this);
-        cowMaker();
-        rock = new Obstacle(300, 1000, 10, "rock", this);
-
+        hunter = new Hunter(50, 5, 5, 500, 400, this);
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
         music = new SoundFile(this, "music.mp3");
         // music.play();
-        PLAY = new Button("PLAY", 375, 300, 250, 50, 10, this);
+        PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);
         SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);
         BACK = new Button("BACK", 375, 400, 250, 50, 10, this);
 
@@ -67,9 +63,13 @@ public class App extends PApplet {
             for (Obstacle o : obstacles) {
 
             }
-            rock.display();
-            if (rock.collidesWith(hunter.getX(), hunter.getX(), hunter.getSize())) {
-                speed = 0;
+            for (NPC n : NPCs) {
+                if (n.isAlive() && n.collidesWithPlayer(hunter)) {
+                    scene = 0; // or scene = 3 for a GAME OVER screen
+                    NPCs.clear();
+                    bullets.clear();
+                    break;
+                }
             }
 
             popMatrix();// chatgpt
@@ -79,7 +79,8 @@ public class App extends PApplet {
         } else if (scene == 2) {
             drawShopScreen();
         }
-        if (scene == 1 && allEnemiesDead()) {// go back to title screen
+        if (scene == 1 && NPCs.size() > 0 && allEnemiesDead() == true) {// go back to title screen but also make sure
+                                                                        // all enemies are actually dead
             scene = 0;
             level++;
             NPCs.clear();
@@ -93,6 +94,7 @@ public class App extends PApplet {
         textSize(64);
         fill(255);
         text("HUNTER", width / 2, 150);
+        PLAY.setText("PLAY LEVEL: " + level);
         PLAY.display();
         SHOP.display();
     }
@@ -162,12 +164,29 @@ public class App extends PApplet {
     public void cowMaker() {
         if (level == 1) {
             for (int i = 0; i < 5; i++) {
-                NPCs.add(new NPC("cow", random(100, 1900), random(100, 1500), 50, 2, this, hunter));
+                NPCs.add(new NPC(random(100, 1900), random(100, 1500), 50, 2, this, hunter));
             }
         } else if (level == 2) {
             for (int i = 0; i < 10; i++) {
-                NPCs.add(new NPC("cow", random(100, 1900), random(100, 1500), 50, 4, this, hunter));
+                float x;
+                float y;
+                float dx;
+                float dy;
+                float dist;
+
+                do {// do picks random place and if it's to close while makes it try again
+                    x = random(100, 1900);
+                    y = random(100, 1500);
+
+                    dx = x - hunter.getX();
+                    dy = y - hunter.getY();
+                    dist = sqrt(dx * dx + dy * dy);
+
+                } while (dist < 300); // minimum safe distance
+
+                NPCs.add(new NPC(x, y, 50, 3, this, hunter));
             }
+
         }
     }
 
@@ -213,22 +232,22 @@ public class App extends PApplet {
     }
 
     public void mousePressed() {
-        if (PLAY.hovered(mouseX, mouseY) == true) {
-            NPCs.clear();
-            cowMaker();
-            scene = 1;
+        if (scene == 0) {// makes buttons non clickable unless scene is correct
+            if (PLAY.hovered(mouseX, mouseY) == true) {
+                NPCs.clear();
+                cowMaker();
+                scene = 1;
+            }
         }
-        if (SHOP.hovered(mouseX, mouseY) == true) {
-            scene = 2;
+        if (scene == 0) {
+            if (SHOP.hovered(mouseX, mouseY) == true) {
+                scene = 2;
+            }
         }
-        if (BACK.hovered(mouseX, mouseY) == true) {
-            scene = 0;
-        }
-    }
-
-    public void mouseMoved() {
-        if (PLAY.hovered(mouseX, mouseY)) {
-            PLAY.setColor(255, 30, 30);
+        if (scene == 2) {
+            if (BACK.hovered(mouseX, mouseY) == true) {
+                scene = 0;
+            }
         }
     }
 }

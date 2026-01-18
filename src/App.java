@@ -13,13 +13,15 @@ public class App extends PApplet {
     boolean shooting;
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     ArrayList<NPC> NPCs = new ArrayList<NPC>();
-    ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+    HighScore highScore;
+    int highScoreCoins;
     int coins;
     int level = 1;
     int scene = 0;
     Button PLAY;
     Button SHOP;
     Button BACK;
+    Button UPGRADE_RELOAD;
 
     SoundFile music;
 
@@ -28,7 +30,10 @@ public class App extends PApplet {
     }
 
     public void setup() {
-        hunter = new Hunter(50, 5, 5, 500, 400, this);
+        highScore = new HighScore();
+        highScoreCoins = highScore.loadHighScore();
+
+        hunter = new Hunter(50, 5, 4, 500, 400, 1000, this);
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
         music = new SoundFile(this, "music.mp3");
@@ -36,6 +41,7 @@ public class App extends PApplet {
         PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);
         SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);
         BACK = new Button("BACK", 375, 400, 250, 50, 10, this);
+        UPGRADE_RELOAD = new Button("UPGRADE RELOAD: 100 coins", 375, 350, 250, 50, 10, this);
 
     }
 
@@ -60,16 +66,20 @@ public class App extends PApplet {
             NPCMovement();
 
             bulletChecker();
-            for (Obstacle o : obstacles) {
-
-            }
             for (NPC n : NPCs) {
                 if (n.isAlive() && n.collidesWithPlayer(hunter)) {
-                    scene = 0; // or scene = 3 for a GAME OVER screen
+
+                    if (coins > highScoreCoins) {
+                        highScore.saveHighScore(coins);
+                        highScoreCoins = coins;
+                    }
+                    coins = 0;
+                    scene = 0;
                     NPCs.clear();
                     bullets.clear();
                     break;
                 }
+
             }
 
             popMatrix();// chatgpt
@@ -89,6 +99,9 @@ public class App extends PApplet {
     }
 
     public void drawTitleScreen() { // Title
+        textSize(24);
+        text("High Score: " + highScoreCoins, width / 2, 220);
+
         background(30, 120, 60);
         textAlign(CENTER);
         textSize(64);
@@ -109,9 +122,13 @@ public class App extends PApplet {
 
         text("SHOP", width / 2, 150);
         text("You have " + coins + " coins", width / 2, 250);
+        textSize(24);
+        text("Current reload: " + hunter.getReload() + " ms", width / 2, 300);
 
-        // Back button to go back to title
+        UPGRADE_RELOAD.display();
         BACK.display();
+
+        BACK.display();// Back button to go back to title
     }
 
     public boolean enemyCollisions(Bullet b, NPC e) {
@@ -198,9 +215,12 @@ public class App extends PApplet {
     }
 
     public void shoot() {
-        bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
-                mouseY + hunter.getY() - height / 2, this));
-
+        int currentTime = millis(); // current time in milliseconds
+        if (currentTime - lastShotTime >= hunter.getReload()) {
+            bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
+                    mouseY + hunter.getY() - height / 2, this));
+            lastShotTime = currentTime; // update the last shot time when shooting occurs
+        }
     }
 
     public void keyPressed() {
@@ -245,8 +265,14 @@ public class App extends PApplet {
             }
         }
         if (scene == 2) {
-            if (BACK.hovered(mouseX, mouseY) == true) {
+            if (BACK.hovered(mouseX, mouseY)) {
                 scene = 0;
+            }
+            if (UPGRADE_RELOAD.hovered(mouseX, mouseY)) {
+                if (coins >= 100) { // cost
+                    coins -= 100; // pay
+                    hunter.upgradeReload(); // reduce reload
+                }
             }
         }
     }

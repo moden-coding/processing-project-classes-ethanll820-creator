@@ -2,17 +2,36 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.File;
 import java.util.Scanner;
+
+import processing.core.PApplet;
+
 import java.nio.file.Paths;
 
 public class HighScore {
 
-   public HighScore() { //doesnt do anything because it doesnt need to
-
-    }
-
     String filePath = "data/highscoreCoins.txt";
 
-    public void saveHighScore(int highScoreCoins) {// SAVE high score coins
+public HighScore() {
+    File folder = new File("data");
+    if (!folder.exists()) {
+        folder.mkdir();
+    }
+
+    File file = new File(filePath);
+if (!file.exists()) {
+    try (PrintWriter writer = new PrintWriter(file)) {
+        writer.println(0); // ONLY write 0 if file is missing
+        System.out.println("High score file created with 0 coins.");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+   
+}
+
+
+    public void saveHighScore(int highScoreCoins) {// Save high score coins
 
         try (PrintWriter writer = new PrintWriter(filePath)) {
             writer.println(highScoreCoins); // Writes the integer to the file

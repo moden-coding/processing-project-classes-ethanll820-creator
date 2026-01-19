@@ -12,8 +12,8 @@ public class App extends PApplet {
     float speed = 5;
     int lastShotTime;
     boolean shooting;
-    ArrayList<Bullet> bullets = new ArrayList<Bullet>();//array list to update and store bullets
-    ArrayList<NPC> NPCs = new ArrayList<NPC>();//array list to update and store NPCs
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();// array list to update and store bullets
+    ArrayList<NPC> NPCs = new ArrayList<NPC>();// array list to update and store NPCs
     HighScore highScore;
     int highScoreCoins;
     int coins;
@@ -31,15 +31,16 @@ public class App extends PApplet {
     public void setup() {
         highScore = new HighScore();
         highScoreCoins = highScore.loadHighScore();
+        coins = highScoreCoins; //loads coins from file
 
         hunter = new Hunter(50, 5, 4, 500, 400, 1000, this);
         spawner = new NPCSpawner(this, hunter);
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
-        PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);//play button
-        SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);//shop button
-        BACK = new Button("BACK", 375, 400, 250, 50, 10, this);//back buttton
-        UPGRADE_RELOAD = new Button("UPGRADE RELOAD: 100 coins", 375, 350, 500, 50, 10, this);//upgrade reload button
+        PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);// play button
+        SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);// shop button
+        BACK = new Button("BACK", 375, 400, 250, 50, 10, this);// back buttton
+        UPGRADE_RELOAD = new Button("UPGRADE RELOAD: 100 coins", 375, 350, 500, 50, 10, this);// upgrade reload button
 
     }
 
@@ -49,9 +50,9 @@ public class App extends PApplet {
 
     public void draw() {
         if (scene == 0) {
-            drawTitleScreen();//start by drawing title with all buttons
+            drawTitleScreen();// start by drawing title with all buttons
 
-        } else if (scene == 1) {//when play is clicked draw the actual game
+        } else if (scene == 1) {// when play is clicked draw the actual game
             background(0);
             hunter.move(moveX, moveY);
 
@@ -91,7 +92,7 @@ public class App extends PApplet {
                                                                         // all enemies are actually dead
             scene = 0;
             level++;
-            coins = coins +100;
+            coins = coins + 100;
             NPCs.clear();
         }
 

@@ -24,8 +24,8 @@ public class NPC {
         if (!alive) {
             return;
         }
-        canvas.fill(color);
-        canvas.ellipse(x, y, size, size);
+        canvas.fill(color);//color
+        canvas.ellipse(x, y, size, size);//draw circle
     }
 
     public void movement() {
@@ -73,10 +73,10 @@ public class NPC {
     float npcRadius = this.size / 2;
     float hRadius = h.getSize() / 2;
 
-    float dx = this.x - h.getX();
-    float dy = this.y - h.getY();
+    float dx = this.x - h.getX();//find x component
+    float dy = this.y - h.getY();//find y component
 
-    float distance = PApplet.sqrt(dx * dx + dy * dy);
+    float distance = PApplet.sqrt(dx * dx + dy * dy);//distance formula
 
     return distance <= npcRadius + hRadius;
 }

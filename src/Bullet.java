@@ -17,15 +17,15 @@ public class Bullet {
         this.canvas = canvas;
 
         float dx = targetX - x;
-        float dy = targetY - y;
+        float dy = targetY - y; 
 
-        // normalize
-        float mag = (float) Math.sqrt(dx * dx + dy * dy);
+
+        float mag = (float) Math.sqrt(dx * dx + dy * dy); // normalize
         dx /= mag;
         dy /= mag;
 
-        // scale by speed
-        vx = dx * speed;
+    
+        vx = dx * speed;  // scale by speed
         vy = dy * speed;
     }
 
@@ -41,7 +41,7 @@ public class Bullet {
     }
 
     public boolean isOffScreen() {
-        return x < -size || x > 2000 + size || y < -size || y > 1600 + size;
+        return x < -size || x > 2000 + size || y < -size || y > 1600 + size; // check if coordinates leave screen
     }
 
     public float getBulletX() {

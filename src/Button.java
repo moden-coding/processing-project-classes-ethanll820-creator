@@ -42,13 +42,13 @@ public class Button {
         return false;
     }
 
-    public void setColor(int r, int g, int b) {
+    public void setColor(int r, int g, int b) {//makes sure that color is always updated
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    public void setText(String newText) {
+    public void setText(String newText) {//makes sure that text is always updated
         this.text = newText;
     }
 

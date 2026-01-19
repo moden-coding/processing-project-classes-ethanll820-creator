@@ -31,7 +31,7 @@ public class App extends PApplet {
     public void setup() {
         highScore = new HighScore();
         highScoreCoins = highScore.loadHighScore();
-        coins = highScoreCoins; //loads coins from file
+        coins = highScoreCoins; // loads coins from file
 
         hunter = new Hunter(50, 5, 4, 500, 400, 1000, this);
         spawner = new NPCSpawner(this, hunter);
@@ -68,7 +68,7 @@ public class App extends PApplet {
             for (NPC n : NPCs) {
                 if (n.isAlive() && n.collidesWithPlayer(hunter)) {
 
-                    if (coins > highScoreCoins) {
+                    if (coins > highScoreCoins) {// only loads coins if need
                         highScore.saveHighScore(coins);
                         highScoreCoins = coins;
                     }
@@ -141,13 +141,14 @@ public class App extends PApplet {
         float dx = b.getBulletX() - e.getNPCsX();
         float dy = b.getBulletY() - e.getNPCsY();
 
-        float distance = sqrt(dx * dx + dy * dy); // pythaogorean theorem
+        float distance = sqrt(dx * dx + dy * dy); // pythaogorean theorem/distance formula
 
         return distance <= bulletRadius + enemyRadius;
     }
 
     public void bulletChecker() {
-        for (int i = bullets.size() - 1; i >= 0; i--) {
+        for (int i = bullets.size() - 1; i >= 0; i--) {// cycles backwards through bullet list to update position and
+                                                       // draw
             Bullet b = bullets.get(i);
             b.update();
             b.display();
@@ -158,18 +159,18 @@ public class App extends PApplet {
                 if (enemyCollisions(b, n)) {
                     n.kill(); // enemy dies
                     hitEnemy = true;
-                    coins = coins + 10;// gives money
+                    coins = coins + 10;// gives money for kill
                     break;
                 }
             }
 
-            if (hitEnemy || b.isOffScreen()) {
+            if (hitEnemy || b.isOffScreen()) {//removes bullet from list if off screen to prevent lag
                 bullets.remove(i);
             }
         }
     }
 
-    public boolean allEnemiesDead() {
+    public boolean allEnemiesDead() {//check if all eneimies have been killed
         for (NPC n : NPCs) {
             if (n.isAlive()) {
                 return false;
@@ -178,7 +179,7 @@ public class App extends PApplet {
         return true;
     }
 
-    public void NPCMovement() {
+    public void NPCMovement() {//cycles through NPC list to move and update them
         for (NPC n : NPCs) {
             n.movement();
             n.display();
@@ -187,14 +188,14 @@ public class App extends PApplet {
 
     public void shoot() {
         int currentTime = millis(); // current time in milliseconds
-        if (currentTime - lastShotTime >= hunter.getReload()) {
+        if (currentTime - lastShotTime >= hunter.getReload()) {//stops bullets from shooting if reload cooldown isn't over
             bullets.add(new Bullet(hunter.getX(), hunter.getY(), 10f, 8f, mouseX + hunter.getX() - width / 2,
-                    mouseY + hunter.getY() - height / 2, this));
+                    mouseY + hunter.getY() - height / 2, this));//adds new bullet to arraylist so it can be drawn and updated
             lastShotTime = currentTime; // update the last shot time when shooting occurs
         }
     }
 
-    public void keyPressed() {
+    public void keyPressed() {//movement and shooting input from keyboard
         if (keyCode == 'D')
             moveX = speed;
         if (keyCode == 'A')
@@ -211,7 +212,7 @@ public class App extends PApplet {
         }
     }
 
-    public void keyReleased() {
+    public void keyReleased() {//fixes releasing keys and inputs stopping
         if (keyCode == 'D' || keyCode == 'A')
             moveX = 0;
         if (keyCode == 'W' || keyCode == 'S')
@@ -223,7 +224,7 @@ public class App extends PApplet {
     }
 
     public void mousePressed() {
-        if (scene == 0) {// makes buttons non clickable unless scene is correct
+        if (scene == 0) {// makes buttons non clickable unless scene is correct to prevent bugs
             if (PLAY.hovered(mouseX, mouseY) == true) {
                 NPCs.clear();
                 spawner.spawnLevel(level, NPCs);
@@ -242,7 +243,7 @@ public class App extends PApplet {
             if (UPGRADE_RELOAD.hovered(mouseX, mouseY)) {
                 if (coins >= 100) { // cost
                     coins -= 100; // pay
-                    hunter.upgradeReload(); // reduce reload
+                    hunter.upgradeReload(); // reduce reload to amount payed for
                 }
             }
         }

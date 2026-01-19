@@ -6,11 +6,11 @@ import java.nio.file.Paths;
 
 public class HighScore {
 
-    public HighScore() {
-        // constructor does not need to do anything
+   public HighScore() { //doesnt do anything because it doesnt need to
+
     }
 
-    String filePath = "highscoreCoins.txt";
+    String filePath = "data/highscoreCoins.txt";
 
     public void saveHighScore(int highScoreCoins) {// SAVE high score coins
 
@@ -28,7 +28,7 @@ public class HighScore {
 
         int highScoreCoins = 0;
 
-        try (Scanner scanner = new Scanner(Paths.get("data/highscoreCoins.txt"))) {// make scanner
+        try (Scanner scanner = new Scanner(Paths.get(filePath))) {// make scanner
 
             while (scanner.hasNextLine()) {//read file
                 String row = scanner.nextLine();//read one line

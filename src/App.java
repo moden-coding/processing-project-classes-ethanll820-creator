@@ -5,14 +5,15 @@ import processing.sound.*;
 
 public class App extends PApplet {
     Hunter hunter;
+    NPCSpawner spawner;
     PImage background;
     float moveX = 0;
     float moveY = 0;
     float speed = 5;
     int lastShotTime;
     boolean shooting;
-    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-    ArrayList<NPC> NPCs = new ArrayList<NPC>();
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();//array list to update and store bullets
+    ArrayList<NPC> NPCs = new ArrayList<NPC>();//array list to update and store NPCs
     HighScore highScore;
     int highScoreCoins;
     int coins;
@@ -23,8 +24,6 @@ public class App extends PApplet {
     Button BACK;
     Button UPGRADE_RELOAD;
 
-    SoundFile music;
-
     public static void main(String[] args) {
         PApplet.main("App");
     }
@@ -34,14 +33,13 @@ public class App extends PApplet {
         highScoreCoins = highScore.loadHighScore();
 
         hunter = new Hunter(50, 5, 4, 500, 400, 1000, this);
+        spawner = new NPCSpawner(this, hunter);
         background = loadImage("grass background.jpg");
         background.resize(2000, 1600);
-        music = new SoundFile(this, "music.mp3");
-        // music.play();
-        PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);
-        SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);
-        BACK = new Button("BACK", 375, 400, 250, 50, 10, this);
-        UPGRADE_RELOAD = new Button("UPGRADE RELOAD: 100 coins", 375, 350, 250, 50, 10, this);
+        PLAY = new Button("PLAY LEVEL: " + level, 375, 300, 250, 50, 10, this);//play button
+        SHOP = new Button("SHOP", 375, 500, 250, 50, 10, this);//shop button
+        BACK = new Button("BACK", 375, 400, 250, 50, 10, this);//back buttton
+        UPGRADE_RELOAD = new Button("UPGRADE RELOAD: 100 coins", 375, 350, 500, 50, 10, this);//upgrade reload button
 
     }
 
@@ -51,9 +49,9 @@ public class App extends PApplet {
 
     public void draw() {
         if (scene == 0) {
-            drawTitleScreen();
+            drawTitleScreen();//start by drawing title with all buttons
 
-        } else if (scene == 1) {
+        } else if (scene == 1) {//when play is clicked draw the actual game
             background(0);
             hunter.move(moveX, moveY);
 
@@ -93,6 +91,7 @@ public class App extends PApplet {
                                                                         // all enemies are actually dead
             scene = 0;
             level++;
+            coins = coins +100;
             NPCs.clear();
         }
 
@@ -178,35 +177,6 @@ public class App extends PApplet {
         return true;
     }
 
-    public void cowMaker() {
-        if (level == 1) {
-            for (int i = 0; i < 5; i++) {
-                NPCs.add(new NPC(random(100, 1900), random(100, 1500), 50, 2, this, hunter));
-            }
-        } else if (level == 2) {
-            for (int i = 0; i < 10; i++) {
-                float x;
-                float y;
-                float dx;
-                float dy;
-                float dist;
-
-                do {// do picks random place and if it's to close while makes it try again
-                    x = random(100, 1900);
-                    y = random(100, 1500);
-
-                    dx = x - hunter.getX();
-                    dy = y - hunter.getY();
-                    dist = sqrt(dx * dx + dy * dy);
-
-                } while (dist < 300); // minimum safe distance
-
-                NPCs.add(new NPC(x, y, 50, 3, this, hunter));
-            }
-
-        }
-    }
-
     public void NPCMovement() {
         for (NPC n : NPCs) {
             n.movement();
@@ -255,7 +225,7 @@ public class App extends PApplet {
         if (scene == 0) {// makes buttons non clickable unless scene is correct
             if (PLAY.hovered(mouseX, mouseY) == true) {
                 NPCs.clear();
-                cowMaker();
+                spawner.spawnLevel(level, NPCs);
                 scene = 1;
             }
         }

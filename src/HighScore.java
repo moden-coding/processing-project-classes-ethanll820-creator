@@ -11,25 +11,24 @@ public class HighScore {
 
     String filePath = "data/highscoreCoins.txt";
 
-public HighScore() {
-    File folder = new File("data");
-    if (!folder.exists()) {
-        folder.mkdir();
+    public HighScore() {
+        File folder = new File("data");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        File file = new File(filePath);
+        if (!file.exists()) {
+            try (PrintWriter writer = new PrintWriter(file)) {
+                writer.println(0); // only write 0 if file is missing used some info from processing.org here
+                                   // because I was having a lot of trouble with file reading
+                System.out.println("High score file created with 0 coins.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
-
-    File file = new File(filePath);
-if (!file.exists()) {
-    try (PrintWriter writer = new PrintWriter(file)) {
-        writer.println(0); // ONLY write 0 if file is missing
-        System.out.println("High score file created with 0 coins.");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
-
-   
-}
-
 
     public void saveHighScore(int highScoreCoins) {// Save high score coins
 
@@ -49,8 +48,8 @@ if (!file.exists()) {
 
         try (Scanner scanner = new Scanner(Paths.get(filePath))) {// make scanner
 
-            while (scanner.hasNextLine()) {//read file
-                String row = scanner.nextLine();//read one line
+            while (scanner.hasNextLine()) {// read file
+                String row = scanner.nextLine();// read one line
                 highScoreCoins = Integer.parseInt(row);// convert line to integer
             }
 
